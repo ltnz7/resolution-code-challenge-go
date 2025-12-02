@@ -5,6 +5,7 @@ import (
 
 	"educabot.com/bookshop/handlers"
 	"educabot.com/bookshop/pkg/bootstrap"
+	"educabot.com/bookshop/providers"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
@@ -16,8 +17,11 @@ func main() {
 	router := gin.New()
 	router.SetTrustedProxies(nil)
 
-	metricsHandler := handlers.NewGetMetrics(mockImpls.NewMockBooksProvider())
-	router.GET("/", metricsHandler.Handle())
+	booksProvider := providers.NewBooksProvider(l)
+	booksHandler := handlers.NewBooksHandler(booksProvider)
+	
+	router.GET("/books", booksHandler.GetBooks)
+	router.GET("/books/metrics", booksHandler.GetMetrics)
 	router.Run(":3000")
 	fmt.Println("Starting server on :3000")
 }

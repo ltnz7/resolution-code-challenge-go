@@ -3,13 +3,21 @@ package providers
 import (
 	"context"
 	"log"
+	"slices"
 
 	"educabot.com/bookshop/models"
 	"educabot.com/bookshop/repositories"
 )
 
+type BooksMetrics struct {
+	MeanUnitsSold        uint   `json:"mean_units_sold"`
+	CheapestBook         string `json:"cheapest_book"`
+	BooksWrittenByAuthor uint   `json:"books_written_by_author"`
+}
+
 type BooksProvider interface {
 	GetBooks(ctx context.Context) []models.Book
+	GetMetrics(ctx context.Context, author string) (*BooksMetrics, error)
 }
 
 type booksProvider struct {
@@ -31,4 +39,46 @@ func (p *booksProvider) GetBooks(ctx context.Context) []models.Book {
 		return []models.Book{}
 	}
 	return books
+}
+
+func (p *booksProvider) GetMetrics(ctx context.Context, author string) (*BooksMetrics, error) {
+	books := p.GetBooks(ctx)
+
+	if len(books) == 0 {
+		return &BooksMetrics{}, nil
+	}
+
+	meanUnitsSold := p.meanUnitsSold(books)
+	cheapestBook := p.cheapestBook(books)
+	booksWrittenByAuthor := p.booksWrittenByAuthor(books, author)
+
+	return &BooksMetrics{
+		MeanUnitsSold:        meanUnitsSold,
+		CheapestBook:         cheapestBook.Name,
+		BooksWrittenByAuthor: booksWrittenByAuthor,
+	}, nil
+}
+
+func (p *booksProvider) meanUnitsSold(books []models.Book) uint {
+	var sum uint
+	for _, book := range books {
+		sum += book.UnitsSold
+	}
+	return sum / uint(len(books))
+}
+
+func (p *booksProvider) cheapestBook(books []models.Book) models.Book {
+	return slices.MinFunc(books, func(a, b models.Book) int {
+		return int(a.Price - b.Price)
+	})
+}
+
+func (p *booksProvider) booksWrittenByAuthor(books []models.Book, author string) uint {
+	var count uint
+	for _, book := range books {
+		if book.Author == author {
+			count++
+		}
+	}
+	return count
 }
