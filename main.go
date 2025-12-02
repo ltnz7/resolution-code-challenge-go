@@ -4,11 +4,15 @@ import (
 	"fmt"
 
 	"educabot.com/bookshop/handlers"
-	"educabot.com/bookshop/repositories/mockImpls"
+	"educabot.com/bookshop/pkg/bootstrap"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	_ = godotenv.Load()
+	l := bootstrap.InitLogger()
+
 	router := gin.New()
 	router.SetTrustedProxies(nil)
 
