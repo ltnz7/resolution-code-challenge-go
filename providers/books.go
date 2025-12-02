@@ -9,10 +9,11 @@ import (
 	"educabot.com/bookshop/repositories"
 )
 
+// BooksMetrics represents statistical metrics about books
 type BooksMetrics struct {
-	MeanUnitsSold        uint   `json:"mean_units_sold"`
-	CheapestBook         string `json:"cheapest_book"`
-	BooksWrittenByAuthor uint   `json:"books_written_by_author"`
+	MeanUnitsSold        uint   `json:"mean_units_sold" example:"10000"`
+	CheapestBook         string `json:"cheapest_book" example:"The Go Programming Language"`
+	BooksWrittenByAuthor uint   `json:"books_written_by_author" example:"2"`
 }
 
 type BooksProvider interface {
