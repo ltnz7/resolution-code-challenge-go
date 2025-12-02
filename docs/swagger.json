@@ -1,0 +1,132 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "resolución de challenge tecnico en go",
+        "title": "Bookshop API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:3000",
+    "basePath": "/",
+    "paths": {
+        "/books": {
+            "get": {
+                "description": "Get a list of all available books",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "books"
+                ],
+                "summary": "Get all books",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Book"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/books/metrics": {
+            "get": {
+                "description": "Get statistical metrics about books, optionally filtered by author",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "books"
+                ],
+                "summary": "Get books metrics",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Author name to filter metrics",
+                        "name": "author",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/providers.BooksMetrics"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.Book": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "type": "string",
+                    "example": "Alan Donovan"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "type": "string",
+                    "example": "The Go Programming Language"
+                },
+                "price": {
+                    "type": "integer",
+                    "example": 45
+                },
+                "units_sold": {
+                    "type": "integer",
+                    "example": 5000
+                }
+            }
+        },
+        "providers.BooksMetrics": {
+            "type": "object",
+            "properties": {
+                "books_written_by_author": {
+                    "type": "integer",
+                    "example": 2
+                },
+                "cheapest_book": {
+                    "type": "string",
+                    "example": "The Go Programming Language"
+                },
+                "mean_units_sold": {
+                    "type": "integer",
+                    "example": 10000
+                }
+            }
+        }
+    }
+}

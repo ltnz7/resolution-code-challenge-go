@@ -10,3 +10,66 @@ En el proyecto proporcionado encontrarás una base de código con algunos contra
 3. Queremos garantizar un uso correcto del contexto en el proyecto. Revisa y ajusta las funciones para asegurarte de que el contexto sea utilizado únicamente donde sea necesario.
 
 4. Es importante que el código esté bien cubierto por tests. Actualiza las pruebas existentes para reflejar los cambios realizados en la lógica de negocio y añade nuevos casos que validen el manejo de errores. Podés usar el comando `go test ./handlers` en la shell.
+
+## Instalación y Ejecución
+
+### Prerrequisitos
+- Go 1.21 o superior
+- Git
+
+### Pasos para ejecutar el proyecto
+
+1. **Clonar el repositorio** (si aún no lo has hecho)
+   ```bash
+   git clone <repository-url>
+   cd resolution-code-challenge-go
+   ```
+
+2. **Instalar las dependencias**
+   ```bash
+   go mod download
+   ```
+
+3. **Configurar las variables de entorno**
+   
+   Crear un archivo `.env` basándote en el archivo `.env-example`:
+   ```bash
+   cp .env-example .env
+   ```
+   
+   Editar el archivo `.env` y agregar la URL de la API de libros:
+   ```
+   BOOKS_API_URL=
+   ```
+
+4. **Ejecutar el proyecto**
+   ```bash
+   go run main.go
+   ```
+
+5. **Acceder a la aplicación**
+   
+   Una vez que el servidor esté ejecutándose, podrás acceder a:
+   
+   - **API Endpoints:**
+     - `GET http://localhost:3000/books` - Obtener todos los libros
+     - `GET http://localhost:3000/books/metrics?author=<nombre>` - Obtener métricas de libros
+   
+   - **Documentación Swagger:**
+     - `http://localhost:3000/swagger/index.html` - Interfaz interactiva de la API
+   
+   Desde la documentación de Swagger podrás probar todos los endpoints de la API de forma interactiva.
+
+### Ejecutar Tests
+
+Para ejecutar todos los tests del proyecto:
+```bash
+go test ./...
+```
+
+Para ejecutar tests de un paquete específico:
+```bash
+go test ./handlers
+go test ./providers
+go test ./repositories
+```
